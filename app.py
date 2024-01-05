@@ -1,7 +1,7 @@
 import os
 import requests
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 from bs4 import BeautifulSoup
 from langchain.chat_models import ChatOpenAI
@@ -14,7 +14,7 @@ import autogen
 
 
 load_dotenv()
-brwoserless_api_key = os.getenv("BROWSERLESS_API_KEY")
+browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serper_api_key = os.getenv("SERP_API_KEY")
 airtable_api_key = os.getenv("AIRTABLE_API_KEY")
 config_list = config_list_from_json("OAI_CONFIG_LIST")
@@ -151,7 +151,7 @@ researcher = GPTAssistantAgent(
     name = "researcher",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_qyvioid5My8K3SdFClaEnwmB"
+        "assistant_id": "asst_tR7vKzX9EdLvyIhWulBxBBbF"
     }
 )
 
@@ -167,7 +167,7 @@ research_manager = GPTAssistantAgent(
     name="research_manager",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_C1Ta5XmmEcYD6vnOSVflnwG9"
+        "assistant_id": "asst_fiaO05ykmux5zCb8H6DH78Uw"
     }
 )
 
@@ -177,16 +177,10 @@ director = GPTAssistantAgent(
     name = "director",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_zVBJGch5mOyCYl9H1J3L9Ime",
+        "assistant_id": "asst_lmIXGArilTLIG25f52ITOiio"
     }
 )
 
-director.register_function(
-    function_map={
-        "get_airtable_records": get_airtable_records,
-        "update_single_airtable_record": update_single_airtable_record
-    }
-)
 
 
 # Create group chat
@@ -195,7 +189,6 @@ group_chat_manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"
 
 
 # ------------------ start conversation ------------------ #
-message = """
-Research the funding stage/amount & pricing for each company in the list: https://airtable.com/appj0J4gFpvLrQWjI/tblF4OmG6oLjYtgZl/viwmFx2ttAVrJm0E3?blocks=hide
-"""
-user_proxy.initiate_chat(group_chat_manager, message=message)
+#message = """Research the funding stage/amount & pricing for each company in the list: https://airtable.com/appj0J4gFpvLrQWjI/tblF4OmG6oLjYtgZl/viwmFx2ttAVrJm0E3?blocks=hideuser_proxy.initiate_chat(group_chat_manager, message=message)
+
+user_proxy.initiate_chat(researcher, message="")
