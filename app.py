@@ -20,6 +20,7 @@ airtable_api_key = os.getenv("AIRTABLE_API_KEY")
 config_list = config_list_from_json("OAI_CONFIG_LIST")
 
 
+
 # ------------------ Create functions ------------------ #
 
 # Function for google search
@@ -116,7 +117,6 @@ def get_airtable_records(base_id, table_id):
 
 
 # Function for update airtable records
-
 def update_single_airtable_record(base_id, table_id, id, fields):
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
 
@@ -137,7 +137,7 @@ def update_single_airtable_record(base_id, table_id, id, fields):
     return data
 
 
-# ------------------ Create agent ------------------ #
+# ------------------ Create agents ------------------ #
 
 # Create user proxy agent
 user_proxy = UserProxyAgent(name="user_proxy",
@@ -181,7 +181,7 @@ director = GPTAssistantAgent(
     }
 )
 
-
+# ------------------ Create group chat ------------------ #
 
 # Create group chat
 groupchat = autogen.GroupChat(agents=[user_proxy, researcher, research_manager, director], messages=[], max_round=15)
