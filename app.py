@@ -1,7 +1,7 @@
 import os
 import requests
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.prompts import PromptTemplate
+from langchain import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 from bs4 import BeautifulSoup
 from langchain.chat_models import ChatOpenAI
@@ -14,10 +14,11 @@ import autogen
 
 
 load_dotenv()
-browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
+brwoserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serper_api_key = os.getenv("SERP_API_KEY")
 airtable_api_key = os.getenv("AIRTABLE_API_KEY")
 config_list = config_list_from_json("OAI_CONFIG_LIST")
+
 
 
 
@@ -33,50 +34,40 @@ user_proxy = UserProxyAgent(name="user_proxy",
     )
 
 # Create thesis agent
-researcher = GPTAssistantAgent(
-    name = "researcher",
+thesis_agent = GPTAssistantAgent(
+    name = "agent",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_tR7vKzX9EdLvyIhWulBxBBbF"
-    }
-)
-# Create researcher agent
-researcher = GPTAssistantAgent(
-    name = "researcher",
-    llm_config = {
-        "config_list": config_list,
-        "assistant_id": "asst_tR7vKzX9EdLvyIhWulBxBBbF"
+        "assistant_id": "asst_9CCtVElya0beNbhEAw6XdeGf"
     }
 )
 
-
-# Create research manager agent
-research_manager = GPTAssistantAgent(
-    name="research_manager",
+# Create thesis manager agent
+thesis_manager = GPTAssistantAgent(
+    name="manager",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_fiaO05ykmux5zCb8H6DH78Uw"
+        "assistant_id": "asst_Zk5WNwrE61SiVCuCfA0CBFqi"
     }
 )
 
-
-# Create director agent
-director = GPTAssistantAgent(
-    name = "director",
+# Create proofreader agent
+proofreader = GPTAssistantAgent(
+    name = "proofreader",
     llm_config = {
         "config_list": config_list,
-        "assistant_id": "asst_lmIXGArilTLIG25f52ITOiio"
+        "assistant_id": "asst_Z4S0aVILsYhBfBCYBGyJBJQO",
     }
 )
 
 # Create group chat ------------------ #
 
 # Create group chat
-groupchat = autogen.GroupChat(agents=[user_proxy, researcher, research_manager, director], messages=[], max_round=15)
+groupchat = autogen.GroupChat(agents=[user_proxy, thesis_agent, thesis_manager, proofreader], messages=[], max_round=15)
 group_chat_manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"config_list": config_list})
 
 
-# Start conversation ------------------ #
-message =""
-user_proxy.initiate_chat(group_chat_manager, message=message)
+# ------------------ start conversation ------------------ #
+message = "Write a chapter with the title Current state of the art of silicon micropumps"
+user_proxy.initiate_groupchat(group_chat_manager, message=message)
 #user_proxy.initiate_chat(researcher, message=message)
